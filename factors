@@ -8,7 +8,7 @@ def factorize_number(n):
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python factors.py <file>")
+        print("Usage: ./factors <file>")
         return
 
     input_file = sys.argv[1]
