@@ -1,0 +1,33 @@
+import sys
+from math import sqrt
+
+def is_prime(n):
+    """Check if a number is prime"""
+    if n < 2:
+        return False
+    for i in range(2, int(sqrt(n))+1):
+        if n % i == 0:
+            return False
+    return True
+
+def prime_factors(n):
+    """Find the prime factors of a number"""
+    for i in range(2, int(sqrt(n))+1):
+        if n % i == 0 and is_prime(i) and is_prime(n // i):
+            return i, n // i
+    return None, None
+
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: ./rsa <file>")
+        return
+
+    input_file = sys.argv[1]
+    with open(input_file, 'r') as file:
+        number = int(file.read().strip())
+
+    p, q = prime_factors(number)
+    print(f"{number}={p}*{q}")
+
+if __name__ == "__main__":
+    main()
