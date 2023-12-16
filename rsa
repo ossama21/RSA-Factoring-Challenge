@@ -1,8 +1,16 @@
 import sys
 from math import sqrt
 
+def open_read_file(file_name):
+    """read from file
+    add to array
+    """
+    with open(file_name, "r", encoding="utf-8") as file:
+        lines = file.readlines()
+    return [int(line) for line in lines]
+
 def is_prime(n):
-    """Check if a number is prime"""
+    """check if n is prime"""
     if n < 2:
         return False
     for i in range(2, int(sqrt(n))+1):
@@ -10,24 +18,22 @@ def is_prime(n):
             return False
     return True
 
-def prime_factors(n):
-    """Find the prime factors of a number"""
-    for i in range(2, int(sqrt(n))+1):
-        if n % i == 0 and is_prime(i) and is_prime(n // i):
-            return i, n // i
-    return None, None
+def find_and_times(n):
+    """factor each
+    n given
+    """
+    for i in range(int(sqrt(n)), 0, -1):
+        if n % i == 0:
+            p, q = n // i, i
+            if is_prime(p) and is_prime(q):
+                print("{}={}*{}".format(n, p, q))
+                break
 
-def main():
-    if len(sys.argv) != 2:
-        print("Usage: ./rsa <file>")
-        return
+def fac_list(ls):
+    """factor each
+    num in ls
+    """
+    [find_and_times(i) for i in ls]
 
-    input_file = sys.argv[1]
-    with open(input_file, 'r') as file:
-        number = int(file.read().strip())
-
-    p, q = prime_factors(number)
-    print(f"{number}={p}*{q}")
-
-if __name__ == "__main__":
-    main()
+if len(sys.argv) == 2:
+    fac_list(open_read_file(sys.argv[1]))
