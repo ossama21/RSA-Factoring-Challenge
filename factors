@@ -1,49 +1,30 @@
 #!/usr/bin/env bash
 # is a factors challenge
+import sys
+from math import sqrt
 
-check_factor()
-{
-	if [ $# -ne 3 ];
-        then
-                args=("$@")
-                count=0
-                num2=1
-                for a in ${args[*]};
-                do
-                        if [ $count -gt 1 ];
-                        then
-                                num2=$(echo $a*$num2 | bc)
-                        fi
-                        count=$((count + 1))
-                done
-        else
-                num2=$3
-        fi
+def open_read_file(file_name):
+    """read from file
+    add to array
+    """
+    with open(file_name, "r", encoding="utf-8") as file:
+        lines = file.readlines()
+    return [int(line) for line in lines]
 
-        num1=$2
-        num=$(echo "$1" | tr ':' '=')
+def find_and_times(n):
+    """factor each
+    n given
+    """
+    for i in range(int(sqrt(n)), 0, -1):
+        if n % i == 0:
+            print("{}={}*{}".format(n, n // i, i))
+            break
 
-        result=$(echo "if($num2 > $num1) 1 else 0" | bc)
-	        if ((result == 1)); then
-		        numcp=$num1
-		        num1=$num2
-		        num2=$numcp
-                fi
+def fac_list(ls):
+    """factor each
+    num in ls
+    """
+    [find_and_times(i) for i in ls]
 
-        echo "$num$num1*$num2"
-}
-
-if [ $# -ne 1 ]
-then
-        echo 'Usage: factors <file>'
-        exit 1
-else
-
-        while read i
-        do
-
-                result=$(factor "$i")
-                check_factor $result
-
-        done < "$1"
-fi
+if len(sys.argv) == 2:
+    fac_list(open_read_file(sys.argv[1]))
